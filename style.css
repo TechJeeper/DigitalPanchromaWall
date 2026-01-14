@@ -180,7 +180,7 @@ header#color-pop-display {
     content: '';
     position: absolute;
     top: 2px; left: 2px; right: 2px; bottom: 2px;
-    background-color: var(--hex-color, #444);
+    background: var(--hex-bg, var(--hex-color, #444));
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     opacity: 0.3; /* Dim by default */
     transition: opacity 0.2s;

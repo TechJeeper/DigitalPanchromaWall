@@ -1,32 +1,42 @@
 const colors = [
-    { name: "Cold White", hex: "#D9DFE5" },
-    { name: "Polymaker Teal", hex: "#4CC0C7" },
-    { name: "Brown", hex: "#55331A" },
-    { name: "Steel Grey", hex: "#616469" },
-    { name: "Yellow", hex: "#FFE800" },
-    { name: "Orange", hex: "#F67405" },
-    { name: "Green", hex: "#06924D" },
-    { name: "Blue", hex: "#003776" },
-    { name: "Red", hex: "#E72F1D" },
-    { name: "Grey", hex: "#8C9099" },
-    { name: "White", hex: "#EBF7FF" },
-    { name: "Black", hex: "#080A0D" },
-    { name: "Dark Grey", hex: "#485259" },
-    { name: "Dark Olive Drab", hex: "#575B54" },
-    { name: "Tan", hex: "#A79E82" },
-    { name: "Azure Blue", hex: "#0066D9" },
-    { name: "Magenta", hex: "#F24574" },
-    { name: "Lime Green", hex: "#D5D701" },
-    { name: "Cream", hex: "#EED1A8" },
-    { name: "Lemon Yellow", hex: "#EED230" },
-    { name: "Stone Blue", hex: "#487BA2" },
-    { name: "Aqua Blue", hex: "#5EBDDB" },
-    { name: "Beige", hex: "#C2AB72" },
-    { name: "Olive Green", hex: "#948902" },
-    { name: "Jungle Green", hex: "#4E742D" },
-    { name: "Wine Red", hex: "#D60212" },
-    { name: "Purple", hex: "#6C47B2" },
-    { name: "Pink", hex: "#F1A1AF" }
+    { name: "Matte Charcoal Black", hex: "#1C1C1C" },
+    { name: "Matte Cotton White", hex: "#E6DDDB" },
+    { name: "Matte Army Beige", hex: "#CCA897" },
+    { name: "Matte Army Brown", hex: "#724E3D" },
+    { name: "Matte Earth Brown", hex: "#623E2A" },
+    { name: "Matte Muted White", hex: "#AFA198" },
+    { name: "Matte Pastel Peanut", hex: "#C29572" },
+    { name: "Matte Wood Brown", hex: "#AD7441" },
+    { name: "Matte Pastel Peach", hex: "#F2B67A" },
+    { name: "Matte Sunrise Orange", hex: "#F78E0E" },
+    { name: "Matte Pastel Banana", hex: "#F5CF6F" },
+    { name: "Matte Army Light Green", hex: "#A78403" },
+    { name: "Matte Savannah Yellow", hex: "#F0BE02" },
+    { name: "Matte Lime Green", hex: "#D0E740" },
+    { name: "Matte Army Dark Green", hex: "#515234" },
+    { name: "Matte Pastel Mint", hex: "#BEC9A5" },
+    { name: "Matte Muted Green", hex: "#656D60" },
+    { name: "Matte Forest Green", hex: "#519F61" },
+    { name: "Matte Arctic Teal", hex: "#5AABB1" },
+    { name: "Matte Pastel Ice", hex: "#95C5D3" },
+    { name: "Matte Sapphire Blue", hex: "#005AA2" },
+    { name: "Matte Army Blue", hex: "#062B4D" },
+    { name: "Matte Muted Blue", hex: "#4E6A84" },
+    { name: "Matte Fossil Grey", hex: "#6F727E" },
+    { name: "Matte Lavender Purple", hex: "#8A68B5" },
+    { name: "Matte Muted Purple", hex: "#7C5577" },
+    { name: "Matte Pastel Candy", hex: "#DABCC8" },
+    { name: "Matte Sakura Pink", hex: "#E0A8BB" },
+    { name: "Matte Pastel Watermelon", hex: "#E93A3F" },
+    { name: "Matte Lava Red", hex: "#DE1619" },
+    { name: "Matte Army Red", hex: "#AC1A17" },
+    { name: "Matte Muted Red", hex: "#DB3E14" },
+
+    // Gradients
+    { name: "Gradient Rainbow", hex: "#FFFF00", background: "linear-gradient(to right, #ff0000, #ffff00, #00ff00, #0000ff, #800080)" },
+    { name: "Gradient Sunset", hex: "#F78E0E", background: "linear-gradient(to right, #F78E0E, #DE1619)" },
+    { name: "Gradient Ocean", hex: "#005AA2", background: "linear-gradient(to right, #5AABB1, #005AA2)" },
+    { name: "Gradient Forest", hex: "#519F61", background: "linear-gradient(to right, #D0E740, #519F61)" }
 ];
 
 const gameBoard = document.getElementById('game-board');
@@ -102,6 +112,12 @@ function createGrid() {
 
             // Set properties on wrapper
             hexWrapper.style.setProperty('--hex-color', color.hex);
+            if (color.background) {
+                hexWrapper.style.setProperty('--hex-bg', color.background);
+                hexWrapper.dataset.background = color.background;
+            } else {
+                hexWrapper.style.setProperty('--hex-bg', color.hex);
+            }
             hexWrapper.dataset.name = color.name;
             hexWrapper.dataset.hex = color.hex;
 
@@ -173,10 +189,11 @@ function endGame() {
     startBtn.disabled = false;
     startBtn.style.opacity = '1';
     startBtn.textContent = "PLAY AGAIN";
-    popText.textContent = `Game Over! Score: ${score}`;
+    popText.innerHTML = `Game Over!<br>Score: ${score}`;
 
     // Reset to white or keep fun?
     popText.classList.remove('panchroma-title');
+    popText.classList.remove('gradient-pop');
     popText.style.removeProperty('color'); // Remove inline color if any
     popText.style.setProperty('--pop-color', '#ffffff');
 }
@@ -233,7 +250,7 @@ document.getElementById('game-board').addEventListener('click', (e) => {
         score++;
         scoreElement.textContent = score;
         hex.classList.remove('active');
-        showColorPop(hex.dataset.name, hex.dataset.hex);
+        showColorPop(hex.dataset.name, hex.dataset.hex, hex.dataset.background);
 
         // Clear timeout and spawn next immediately
         clearTimeout(activeHexTimeout);
@@ -255,14 +272,22 @@ document.getElementById('game-board').addEventListener('touchstart', (e) => {
 }, {passive: false});
 
 
-function showColorPop(name, color) {
+function showColorPop(name, color, background) {
     popText.textContent = name;
 
     popText.classList.remove('panchroma-title');
+    popText.classList.remove('gradient-pop');
 
     // Use CSS variable instead of inline color style
     popText.style.removeProperty('color');
-    popText.style.setProperty('--pop-color', color);
+
+    if (background && background.includes('gradient')) {
+         popText.style.setProperty('--pop-bg', background);
+         popText.style.setProperty('--pop-color', color); // Fallback/shadow
+         popText.classList.add('gradient-pop');
+    } else {
+         popText.style.setProperty('--pop-color', color);
+    }
 
     // Reset animation
     popText.classList.remove('pop-anim');
