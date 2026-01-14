@@ -55,36 +55,52 @@ function createGrid() {
 
     let colorIndex = 0;
 
+    const gridContainer = document.createElement('div');
+    gridContainer.id = 'grid-container';
+
     for (let r = 0; r < rows; r++) {
         const rowDiv = document.createElement('div');
         rowDiv.className = 'hex-row';
 
         for (let c = 0; c < hexesPerRow; c++) {
-            const hexDiv = document.createElement('div');
-            hexDiv.className = 'hex';
+            // Create wrapper
+            const hexWrapper = document.createElement('div');
+            hexWrapper.className = 'hex';
+
+            // Create inner visual element
+            const hexInner = document.createElement('div');
+            hexInner.className = 'hex-inner';
+
+            // Append inner to wrapper
+            hexWrapper.appendChild(hexInner);
 
             const color = fillColors[colorIndex % fillColors.length];
             colorIndex++;
 
-            hexDiv.style.setProperty('--hex-color', color.hex);
-            hexDiv.dataset.name = color.name;
-            hexDiv.dataset.hex = color.hex;
+            // Set properties on wrapper
+            hexWrapper.style.setProperty('--hex-color', color.hex);
+            hexWrapper.dataset.name = color.name;
+            hexWrapper.dataset.hex = color.hex;
 
-            rowDiv.appendChild(hexDiv);
+            rowDiv.appendChild(hexWrapper);
         }
-        gameBoard.appendChild(rowDiv);
+        gridContainer.appendChild(rowDiv);
     }
+    gameBoard.appendChild(gridContainer);
 }
 
 // Initial Call
 window.addEventListener('resize', createGrid);
-window.addEventListener('load', createGrid);
+window.addEventListener('load', () => {
+    createGrid();
+    document.getElementById('pop-text').classList.add('panchroma-title');
+});
 
 // Game Logic
 let score = 0;
 let timeLeft = 60;
 let gameInterval;
-let spawnInterval;
+let activeHexTimeout;
 let isPlaying = false;
 
 const scoreElement = document.getElementById('score');
@@ -115,45 +131,50 @@ function startGame() {
         }
     }, 1000);
 
-    // Spawn rate
-    spawnInterval = setInterval(lightUpRandomHex, 600);
-    lightUpRandomHex();
+    spawnHex();
 }
 
 function endGame() {
     isPlaying = false;
     clearInterval(gameInterval);
-    clearInterval(spawnInterval);
+    clearTimeout(activeHexTimeout);
+
+    // Clear any active hex
+    document.querySelectorAll('.hex.active').forEach(h => h.classList.remove('active'));
+
     startBtn.disabled = false;
     startBtn.style.opacity = '1';
     startBtn.textContent = "PLAY AGAIN";
-    // alert(`Game Over! Score: ${score}`); // Alert is blocking, maybe just show button
     popText.textContent = `Game Over! Score: ${score}`;
-    popText.style.color = '#fff';
+
+    // Reset to white or keep fun?
+    popText.classList.remove('panchroma-title');
+    popText.style.removeProperty('color'); // Remove inline color if any
+    popText.style.setProperty('--pop-color', '#ffffff');
 }
 
-function lightUpRandomHex() {
+function spawnHex() {
     if (!isPlaying) return;
     const hexes = document.querySelectorAll('.hex');
     if (hexes.length === 0) return;
 
-    // Try to find a non-active hex, max 10 tries
-    let randomHex;
-    for(let i=0; i<10; i++) {
-        randomHex = hexes[Math.floor(Math.random() * hexes.length)];
-        if (!randomHex.classList.contains('active')) break;
-    }
+    // Pick a random hex
+    // Since only 1 is active and we clear it before spawn or on click, we can just pick any.
+    // However, if we want to avoid picking the same one twice in a row, we could, but random is fine.
 
-    if (randomHex && !randomHex.classList.contains('active')) {
-        randomHex.classList.add('active');
+    const randomHex = hexes[Math.floor(Math.random() * hexes.length)];
+    randomHex.classList.add('active');
 
-        // Auto turn off after some time (1.5s)
-        setTimeout(() => {
-            if (randomHex.classList.contains('active')) {
-                randomHex.classList.remove('active');
-            }
-        }, 1500);
-    }
+    // Calculate duration: 5000ms at 60s -> 1000ms at 0s
+    // Formula: 1000 + (timeLeft / 60) * 4000
+    let duration = 1000 + (timeLeft / 60) * 4000;
+
+    activeHexTimeout = setTimeout(() => {
+        if (!isPlaying) return;
+        randomHex.classList.remove('active');
+        // Spawn next immediately
+        spawnHex();
+    }, duration);
 }
 
 document.getElementById('game-board').addEventListener('click', (e) => {
@@ -170,6 +191,10 @@ document.getElementById('game-board').addEventListener('click', (e) => {
         scoreElement.textContent = score;
         hex.classList.remove('active');
         showColorPop(hex.dataset.name, hex.dataset.hex);
+
+        // Clear timeout and spawn next immediately
+        clearTimeout(activeHexTimeout);
+        spawnHex();
     }
 });
 
@@ -185,7 +210,13 @@ document.getElementById('game-board').addEventListener('touchstart', (e) => {
 
 function showColorPop(name, color) {
     popText.textContent = name;
-    popText.style.color = color;
+
+    popText.classList.remove('panchroma-title');
+
+    // Use CSS variable instead of inline color style
+    popText.style.removeProperty('color');
+    popText.style.setProperty('--pop-color', color);
+
     // Reset animation
     popText.classList.remove('pop-anim');
     void popText.offsetWidth; // trigger reflow
