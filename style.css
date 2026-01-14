@@ -113,7 +113,22 @@ header#color-pop-display {
     display: flex;
     /* Adjust margin to include gap.
        For perfect interlocking with gap:
-       margin-top = -0.25 * H + 0.866 * Gap.
+       Vertical Spacing = sqrt(3)/2 * (Width + Gap)
+       Current Height (H) = sqrt(3)/2 * 2 * Width/sqrt(3) * 1.1547...
+       H = 1.1547 * Width.
+
+       We want vertical distance between centers = sqrt(3)/2 * (Width + Gap) = 0.866 * Width + 0.866 * Gap
+
+       We have H = 1.1547 * Width.
+       Overlap logic:
+       Margin-top puts the row up.
+       Center distance = H + margin-top.
+       So margin-top = Center distance - H
+       = 0.866 * Width + 0.866 * Gap - 1.1547 * Width
+       = -0.2887 * Width + 0.866 * Gap.
+
+       -0.2887 * Width is exactly -0.25 * H (since H=1.1547*W, 0.25*H = 0.2887*W).
+       So margin-top = -0.25 * H + 0.866 * Gap.
     */
     margin-top: calc(var(--hex-height) * -0.25 + var(--gap) * 0.866);
     /* Remove bottom margin to avoid double overlap */
