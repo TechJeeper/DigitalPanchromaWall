@@ -98,7 +98,15 @@ header#color-pop-display {
     width: 100%;
     padding: 20px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow: hidden; /* Ensure wall fits without scrolling */
+}
+
+/* New Container for Grid Alignment */
+#grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Key: align rows relative to left edge */
+    width: fit-content;      /* Shrink to content width */
 }
 
 /* New Container for Grid Alignment */

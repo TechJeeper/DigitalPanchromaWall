@@ -155,8 +155,6 @@ function endGame() {
 
 function spawnHex() {
     if (!isPlaying) return;
-    const hexes = document.querySelectorAll('.hex');
-    if (hexes.length === 0) return;
 
     // Pick a random hex
     // Since only 1 is active and we clear it before spawn or on click, we can just pick any.
