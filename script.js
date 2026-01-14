@@ -87,37 +87,6 @@ function createGrid() {
         gridContainer.appendChild(rowDiv);
     }
     gameBoard.appendChild(gridContainer);
-
-    // Ensure we calculate playable hexes after layout
-    setTimeout(markPlayableHexes, 0);
-}
-
-function markPlayableHexes() {
-    const boardRect = gameBoard.getBoundingClientRect();
-    const hexes = document.querySelectorAll('.hex');
-
-    // Safety margin to ensure we don't light up anything even slightly cut off
-    // or perfectly touching the edge if it looks bad.
-    // Let's use exact strict containment.
-
-    hexes.forEach(hex => {
-        const rect = hex.getBoundingClientRect();
-
-        // Check containment
-        // We use a small epsilon (1px) for float comparisons just in case
-        const isVisible = (
-            rect.top >= boardRect.top - 1 &&
-            rect.bottom <= boardRect.bottom + 1 &&
-            rect.left >= boardRect.left - 1 &&
-            rect.right <= boardRect.right + 1
-        );
-
-        if (isVisible) {
-            hex.classList.add('playable');
-        } else {
-            hex.classList.remove('playable');
-        }
-    });
 }
 
 // Initial Call
@@ -187,36 +156,20 @@ function endGame() {
 function spawnHex() {
     if (!isPlaying) return;
 
-    // Only choose from playable (fully visible) hexes
-    const hexes = document.querySelectorAll('.hex.playable');
-
-    if (hexes.length === 0) {
-        // Fallback if no hexes are marked playable (e.g. extremely small screen or layout issue)
-        // Just pick any hex so the game doesn't stall
-        console.warn("No playable hexes found, falling back to all hexes");
-        const allHexes = document.querySelectorAll('.hex');
-        if (allHexes.length === 0) return; // Should not happen
-        const randomHex = allHexes[Math.floor(Math.random() * allHexes.length)];
-        randomHex.classList.add('active');
-        scheduleNext(randomHex);
-        return;
-    }
-
     // Pick a random hex
+    // Since only 1 is active and we clear it before spawn or on click, we can just pick any.
+    // However, if we want to avoid picking the same one twice in a row, we could, but random is fine.
+
     const randomHex = hexes[Math.floor(Math.random() * hexes.length)];
     randomHex.classList.add('active');
 
-    scheduleNext(randomHex);
-}
-
-function scheduleNext(activeHex) {
     // Calculate duration: 5000ms at 60s -> 1000ms at 0s
     // Formula: 1000 + (timeLeft / 60) * 4000
     let duration = 1000 + (timeLeft / 60) * 4000;
 
     activeHexTimeout = setTimeout(() => {
         if (!isPlaying) return;
-        activeHex.classList.remove('active');
+        randomHex.classList.remove('active');
         // Spawn next immediately
         spawnHex();
     }, duration);
