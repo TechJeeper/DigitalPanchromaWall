@@ -93,12 +93,20 @@ header#color-pop-display {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Center vertically */
+    align-items: center;     /* Center grid-container horizontally */
     width: 100%;
     padding: 20px;
     box-sizing: border-box;
     overflow-y: auto;
+}
+
+/* New Container for Grid Alignment */
+#grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Key: align rows relative to left edge */
+    width: fit-content;      /* Shrink to content width */
 }
 
 .hex-row {
