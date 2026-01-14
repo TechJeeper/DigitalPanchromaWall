@@ -31,6 +31,29 @@ const colors = [
 
 const gameBoard = document.getElementById('game-board');
 
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playClickSound() {
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+
+    oscillator.type = 'square';
+    oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.1);
+
+    gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    oscillator.start();
+    oscillator.stop(audioCtx.currentTime + 0.1);
+}
+
 function createGrid() {
     gameBoard.innerHTML = '';
 
@@ -112,6 +135,11 @@ startBtn.addEventListener('click', startGame);
 
 function startGame() {
     if (isPlaying) return;
+
+    if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
     isPlaying = true;
     score = 0;
     timeLeft = 60;
@@ -160,6 +188,9 @@ function spawnHex() {
     // Since only 1 is active and we clear it before spawn or on click, we can just pick any.
     // However, if we want to avoid picking the same one twice in a row, we could, but random is fine.
 
+    const hexes = document.querySelectorAll('.hex');
+    if (hexes.length === 0) return;
+
     const randomHex = hexes[Math.floor(Math.random() * hexes.length)];
     randomHex.classList.add('active');
 
@@ -183,6 +214,8 @@ document.getElementById('game-board').addEventListener('click', (e) => {
     const hex = e.target.closest('.hex');
     if (!hex || !isPlaying) return;
 
+    playClickSound();
+
     if (hex.classList.contains('active')) {
         // Success
         score++;
@@ -193,6 +226,10 @@ document.getElementById('game-board').addEventListener('click', (e) => {
         // Clear timeout and spawn next immediately
         clearTimeout(activeHexTimeout);
         spawnHex();
+    } else {
+        // Incorrect click
+        score--;
+        scoreElement.textContent = score;
     }
 });
 

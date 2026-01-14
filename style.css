@@ -163,6 +163,7 @@ header#color-pop-display {
     position: relative;
     /* No clip-path here so drop-shadow can go outside */
     transition: filter 0.2s, transform 0.1s;
+    filter: drop-shadow(0 0 2px #000000);
 }
 
 /* Inner visual element with shape */
@@ -189,7 +190,7 @@ header#color-pop-display {
 .hex.active {
     z-index: 2; /* Bring to front */
     /* Glow effect outside the shape */
-    filter: drop-shadow(0 0 15px var(--hex-color)) brightness(1.2);
+    filter: drop-shadow(0 0 4px #FFFFFF) drop-shadow(0 0 15px var(--hex-color)) brightness(1.2);
     transform: scale(1.05); /* Slight pop */
 }
 
