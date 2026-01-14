@@ -185,13 +185,25 @@ function spawnHex() {
     if (!isPlaying) return;
 
     // Pick a random hex
-    // Since only 1 is active and we clear it before spawn or on click, we can just pick any.
-    // However, if we want to avoid picking the same one twice in a row, we could, but random is fine.
-
-    const hexes = document.querySelectorAll('.hex');
+    const hexes = Array.from(document.querySelectorAll('.hex'));
     if (hexes.length === 0) return;
 
-    const randomHex = hexes[Math.floor(Math.random() * hexes.length)];
+    // Filter hexes to find only those fully visible within the gameBoard
+    const boardRect = gameBoard.getBoundingClientRect();
+    const visibleHexes = hexes.filter(h => {
+        const rect = h.getBoundingClientRect();
+        return (
+            rect.top >= boardRect.top &&
+            rect.bottom <= boardRect.bottom &&
+            rect.left >= boardRect.left &&
+            rect.right <= boardRect.right
+        );
+    });
+
+    // Fallback to all hexes if somehow none are visible (e.g. extremely small screen)
+    const candidates = visibleHexes.length > 0 ? visibleHexes : hexes;
+
+    const randomHex = candidates[Math.floor(Math.random() * candidates.length)];
     randomHex.classList.add('active');
 
     // Calculate duration: 5000ms at 60s -> 1000ms at 0s
