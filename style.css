@@ -18,6 +18,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
+    height: 100dvh; /* Better mobile support */
 }
 
 #game-container {
@@ -81,7 +82,12 @@ header#color-pop-display {
 
 .hex-row {
     display: flex;
-    margin-top: calc(var(--hex-height) * -0.25); /* Nesting */
+    /* Adjust margin to include gap.
+       Distance between centers vertical = 0.75 * Height + Gap
+       Row Height = Height
+       Margin = Distance - Height = -0.25 * Height + Gap
+    */
+    margin-top: calc(var(--hex-height) * -0.25 + var(--gap));
     /* Remove bottom margin to avoid double overlap */
     margin-bottom: 0;
 }
@@ -132,16 +138,19 @@ header#color-pop-display {
 
 #start-btn {
     position: absolute;
-    bottom: 20px;
-    padding: 15px 40px;
-    font-size: 1.5rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px 50px;
+    font-size: 2rem;
     background-color: #e72f1d;
     color: white;
     border: none;
-    border-radius: 30px;
+    border-radius: 50px;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    z-index: 20;
+    box-shadow: 0 0 30px rgba(0,0,0,0.7);
+    z-index: 100;
+    white-space: nowrap;
 }
 
 #start-btn:disabled {
