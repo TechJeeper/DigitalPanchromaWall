@@ -60,17 +60,26 @@ function createGrid() {
         rowDiv.className = 'hex-row';
 
         for (let c = 0; c < hexesPerRow; c++) {
-            const hexDiv = document.createElement('div');
-            hexDiv.className = 'hex';
+            // Create wrapper
+            const hexWrapper = document.createElement('div');
+            hexWrapper.className = 'hex';
+
+            // Create inner visual element
+            const hexInner = document.createElement('div');
+            hexInner.className = 'hex-inner';
+
+            // Append inner to wrapper
+            hexWrapper.appendChild(hexInner);
 
             const color = fillColors[colorIndex % fillColors.length];
             colorIndex++;
 
-            hexDiv.style.setProperty('--hex-color', color.hex);
-            hexDiv.dataset.name = color.name;
-            hexDiv.dataset.hex = color.hex;
+            // Set properties on wrapper
+            hexWrapper.style.setProperty('--hex-color', color.hex);
+            hexWrapper.dataset.name = color.name;
+            hexWrapper.dataset.hex = color.hex;
 
-            rowDiv.appendChild(hexDiv);
+            rowDiv.appendChild(hexWrapper);
         }
         gameBoard.appendChild(rowDiv);
     }
@@ -78,7 +87,10 @@ function createGrid() {
 
 // Initial Call
 window.addEventListener('resize', createGrid);
-window.addEventListener('load', createGrid);
+window.addEventListener('load', () => {
+    createGrid();
+    document.getElementById('pop-text').classList.add('panchroma-title');
+});
 
 // Game Logic
 let score = 0;
@@ -129,7 +141,11 @@ function endGame() {
     startBtn.textContent = "PLAY AGAIN";
     // alert(`Game Over! Score: ${score}`); // Alert is blocking, maybe just show button
     popText.textContent = `Game Over! Score: ${score}`;
-    popText.style.color = '#fff';
+
+    // Reset to white or keep fun?
+    popText.classList.remove('panchroma-title');
+    popText.style.removeProperty('color'); // Remove inline color if any
+    popText.style.setProperty('--pop-color', '#ffffff');
 }
 
 function lightUpRandomHex() {
@@ -185,7 +201,13 @@ document.getElementById('game-board').addEventListener('touchstart', (e) => {
 
 function showColorPop(name, color) {
     popText.textContent = name;
-    popText.style.color = color;
+
+    popText.classList.remove('panchroma-title');
+
+    // Use CSS variable instead of inline color style
+    popText.style.removeProperty('color');
+    popText.style.setProperty('--pop-color', color);
+
     // Reset animation
     popText.classList.remove('pop-anim');
     void popText.offsetWidth; // trigger reflow
