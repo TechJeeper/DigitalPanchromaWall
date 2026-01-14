@@ -41,20 +41,41 @@ header#color-pop-display {
 
 #pop-text {
     font-size: 3rem;
-    font-weight: bold;
-    text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-weight: 800; /* Bolder */
     margin: 0;
     text-align: center;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+    /* Bubble Effect Base */
+    color: var(--pop-color, #fff);
+    text-shadow:
+        3px 3px 0 #000,
+        -1px -1px 0 rgba(255, 255, 255, 0.3),
+        0 0 10px var(--pop-color, rgba(255,255,255,0.5));
+    letter-spacing: 1px;
+}
+
+/* Panchroma Rainbow Effect */
+#pop-text.panchroma-title {
+    background: linear-gradient(
+        to right,
+        #E72F1D, #F67405, #FFE800, #06924D, #4CC0C7, #003776, #6C47B2, #F24574
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: none; /* Text shadow interferes with clip */
+    filter: drop-shadow(2px 2px 0 #000); /* Drop shadow works with clipped text */
 }
 
 .pop-anim {
-    animation: popScale 0.5s ease-out;
+    animation: popBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-@keyframes popScale {
+@keyframes popBounce {
     0% { transform: scale(0.5); opacity: 0; }
-    50% { transform: scale(1.2); opacity: 1; }
+    40% { transform: scale(1.3); opacity: 1; }
+    70% { transform: scale(0.9); }
     100% { transform: scale(1); opacity: 1; }
 }
 
@@ -72,22 +93,29 @@ header#color-pop-display {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* Center vertically */
+    align-items: center;     /* Center grid-container horizontally */
     width: 100%;
     padding: 20px;
     box-sizing: border-box;
-    overflow-y: auto;
+    overflow: hidden; /* Ensure wall fits without scrolling */
+}
+
+/* New Container for Grid Alignment */
+#grid-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Key: align rows relative to left edge */
+    width: fit-content;      /* Shrink to content width */
 }
 
 .hex-row {
     display: flex;
     /* Adjust margin to include gap.
-       Distance between centers vertical = 0.75 * Height + Gap
-       Row Height = Height
-       Margin = Distance - Height = -0.25 * Height + Gap
+       For perfect interlocking with gap:
+       margin-top = -0.25 * H + 0.866 * Gap.
     */
-    margin-top: calc(var(--hex-height) * -0.25 + var(--gap));
+    margin-top: calc(var(--hex-height) * -0.25 + var(--gap) * 0.866);
     /* Remove bottom margin to avoid double overlap */
     margin-bottom: 0;
 }
@@ -100,40 +128,51 @@ header#color-pop-display {
     margin-left: calc(var(--hex-width) * 0.5 + var(--gap) / 2);
 }
 
+/* Wrapper for layout and outer glow */
 .hex {
     width: var(--hex-width);
     height: var(--hex-height);
-    background-color: #333; /* Default off color */
-    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     margin: 0 calc(var(--gap) / 2);
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    transition: filter 0.2s, transform 0.1s;
     position: relative;
-    /* To keep aspect ratio */
+    /* No clip-path here so drop-shadow can go outside */
+    transition: filter 0.2s, transform 0.1s;
 }
 
-.hex::before {
+/* Inner visual element with shape */
+.hex-inner {
+    width: 100%;
+    height: 100%;
+    background-color: #333; /* Default off color */
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+.hex-inner::before {
     content: '';
     position: absolute;
     top: 2px; left: 2px; right: 2px; bottom: 2px;
     background-color: var(--hex-color, #444);
     clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
     opacity: 0.3; /* Dim by default */
-    transition: opacity 0.2s, box-shadow 0.2s;
+    transition: opacity 0.2s;
     z-index: 1;
-}
-
-.hex.active::before {
-    opacity: 1;
-    box-shadow: 0 0 20px var(--hex-color);
-    filter: brightness(1.5);
 }
 
 .hex.active {
     z-index: 2; /* Bring to front */
+    /* Glow effect outside the shape */
+    filter: drop-shadow(0 0 15px var(--hex-color)) brightness(1.2);
+    transform: scale(1.05); /* Slight pop */
+}
+
+.hex.active .hex-inner::before {
+    opacity: 1;
+    /* Inner brightness is handled by parent filter */
 }
 
 #start-btn {
