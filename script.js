@@ -228,24 +228,9 @@ const popText = document.getElementById('pop-text');
 const nameModal = document.getElementById('name-modal');
 const nameInput = document.getElementById('player-name-input');
 const submitScoreBtn = document.getElementById('submit-score-btn');
-const noThanksBtn = document.getElementById('no-thanks-btn');
 const badWords = ["FUCK", "SHIT", "DAMN", "BITCH", "CRAP", "HELL", "ASS", "DICK", "COCK", "PUSSY", "BASTARD", "SLUT", "WHORE", "NIGGER", "FAGGOT"];
 
 submitScoreBtn.addEventListener('click', submitScore);
-noThanksBtn.addEventListener('click', () => {
-    nameModal.classList.remove('visible');
-
-    // Reset UI to Title state
-    startBtn.disabled = false;
-    startBtn.style.opacity = '1';
-    startBtn.textContent = "PLAY AGAIN";
-
-    popText.textContent = "Panchroma";
-    popText.classList.add('panchroma-title');
-    popText.style.removeProperty('--pop-color');
-    popText.style.removeProperty('--pop-bg');
-    popText.classList.remove('gradient-pop');
-});
 
 startBtn.addEventListener('click', startGame);
 
@@ -315,10 +300,8 @@ function submitScore() {
     const nameUpper = rawName.toUpperCase();
 
     // Profanity check
-    // Split by non-word characters to catch words like "ASS" in "YOU-ASS" but allow "CASSANDRA"
-    const nameTokens = nameUpper.split(/[^A-Z]+/);
     for (let word of badWords) {
-        if (nameTokens.includes(word)) {
+        if (nameUpper.includes(word)) {
             alert("Please use an appropriate name.");
             nameInput.value = '';
             return;
