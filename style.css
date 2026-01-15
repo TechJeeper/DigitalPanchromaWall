@@ -37,6 +37,22 @@ header#color-pop-display {
     align-items: center;
     width: 100%;
     z-index: 10;
+    position: relative;
+}
+
+#leaderboard-link {
+    position: absolute;
+    left: 20px;
+    font-size: 2rem;
+    text-decoration: none;
+    filter: drop-shadow(0 0 2px rgba(255,255,255,0.3));
+    transition: transform 0.2s;
+    z-index: 20;
+    cursor: pointer;
+}
+#leaderboard-link:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.8));
 }
 
 #pop-text {
