@@ -223,6 +223,7 @@ const scoreElement = document.getElementById('score');
 const timeElement = document.getElementById('time');
 const startBtn = document.getElementById('start-btn');
 const popText = document.getElementById('pop-text');
+const gameOverMessage = document.getElementById('game-over-message');
 
 startBtn.addEventListener('click', startGame);
 
@@ -240,6 +241,7 @@ function startGame() {
     timeElement.textContent = timeLeft;
     startBtn.disabled = true;
     startBtn.style.opacity = '0'; // Hide button visually
+    gameOverMessage.style.opacity = '0';
 
     // Clear any existing active hexes
     document.querySelectorAll('.hex.active').forEach(h => h.classList.remove('active'));
@@ -266,12 +268,15 @@ function endGame() {
     startBtn.disabled = false;
     startBtn.style.opacity = '1';
     startBtn.textContent = "PLAY AGAIN";
-    popText.innerHTML = `Game Over!<br>Score: ${score}`;
 
-    // Reset to white or keep fun?
-    popText.classList.remove('panchroma-title');
+    gameOverMessage.innerHTML = `Game Over!<br>Score: ${score}`;
+    gameOverMessage.style.opacity = '1';
+
+    // Reset Title
+    popText.textContent = "Panchroma";
+    popText.classList.add('panchroma-title');
     popText.classList.remove('gradient-pop');
-    popText.style.removeProperty('color'); // Remove inline color if any
+    popText.style.removeProperty('color');
     popText.style.setProperty('--pop-color', '#ffffff');
 }
 
