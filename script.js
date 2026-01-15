@@ -1,42 +1,116 @@
 const colors = [
-    { name: "Matte Charcoal Black", hex: "#1C1C1C" },
-    { name: "Matte Cotton White", hex: "#E6DDDB" },
-    { name: "Matte Army Beige", hex: "#CCA897" },
-    { name: "Matte Army Brown", hex: "#724E3D" },
-    { name: "Matte Earth Brown", hex: "#623E2A" },
-    { name: "Matte Muted White", hex: "#AFA198" },
-    { name: "Matte Pastel Peanut", hex: "#C29572" },
-    { name: "Matte Wood Brown", hex: "#AD7441" },
-    { name: "Matte Pastel Peach", hex: "#F2B67A" },
-    { name: "Matte Sunrise Orange", hex: "#F78E0E" },
-    { name: "Matte Pastel Banana", hex: "#F5CF6F" },
-    { name: "Matte Army Light Green", hex: "#A78403" },
-    { name: "Matte Savannah Yellow", hex: "#F0BE02" },
-    { name: "Matte Lime Green", hex: "#D0E740" },
-    { name: "Matte Army Dark Green", hex: "#515234" },
-    { name: "Matte Pastel Mint", hex: "#BEC9A5" },
-    { name: "Matte Muted Green", hex: "#656D60" },
-    { name: "Matte Forest Green", hex: "#519F61" },
-    { name: "Matte Arctic Teal", hex: "#5AABB1" },
-    { name: "Matte Pastel Ice", hex: "#95C5D3" },
-    { name: "Matte Sapphire Blue", hex: "#005AA2" },
-    { name: "Matte Army Blue", hex: "#062B4D" },
-    { name: "Matte Muted Blue", hex: "#4E6A84" },
-    { name: "Matte Fossil Grey", hex: "#6F727E" },
-    { name: "Matte Lavender Purple", hex: "#8A68B5" },
-    { name: "Matte Muted Purple", hex: "#7C5577" },
-    { name: "Matte Pastel Candy", hex: "#DABCC8" },
-    { name: "Matte Sakura Pink", hex: "#E0A8BB" },
-    { name: "Matte Pastel Watermelon", hex: "#E93A3F" },
-    { name: "Matte Lava Red", hex: "#DE1619" },
-    { name: "Matte Army Red", hex: "#AC1A17" },
-    { name: "Matte Muted Red", hex: "#DB3E14" },
+    { name: "Matte Charcoal Black", hex: "#1C1C1C", type: "matte" },
+    { name: "Matte Cotton White", hex: "#E6DDDB", type: "matte" },
+    { name: "Matte Army Beige", hex: "#CCA897", type: "matte" },
+    { name: "Matte Army Brown", hex: "#724E3D", type: "matte" },
+    { name: "Matte Earth Brown", hex: "#623E2A", type: "matte" },
+    { name: "Matte Muted White", hex: "#AFA198", type: "matte" },
+    { name: "Matte Pastel Peanut", hex: "#C29572", type: "matte" },
+    { name: "Matte Wood Brown", hex: "#AD7441", type: "matte" },
+    { name: "Matte Pastel Peach", hex: "#F2B67A", type: "matte" },
+    { name: "Matte Sunrise Orange", hex: "#F78E0E", type: "matte" },
+    { name: "Matte Pastel Banana", hex: "#F5CF6F", type: "matte" },
+    { name: "Matte Army Light Green", hex: "#A78403", type: "matte" },
+    { name: "Matte Savannah Yellow", hex: "#F0BE02", type: "matte" },
+    { name: "Matte Lime Green", hex: "#D0E740", type: "matte" },
+    { name: "Matte Army Dark Green", hex: "#515234", type: "matte" },
+    { name: "Matte Pastel Mint", hex: "#BEC9A5", type: "matte" },
+    { name: "Matte Muted Green", hex: "#656D60", type: "matte" },
+    { name: "Matte Forest Green", hex: "#519F61", type: "matte" },
+    { name: "Matte Arctic Teal", hex: "#5AABB1", type: "matte" },
+    { name: "Matte Pastel Ice", hex: "#95C5D3", type: "matte" },
+    { name: "Matte Sapphire Blue", hex: "#005AA2", type: "matte" },
+    { name: "Matte Army Blue", hex: "#062B4D", type: "matte" },
+    { name: "Matte Muted Blue", hex: "#4E6A84", type: "matte" },
+    { name: "Matte Fossil Grey", hex: "#6F727E", type: "matte" },
+    { name: "Matte Lavender Purple", hex: "#8A68B5", type: "matte" },
+    { name: "Matte Muted Purple", hex: "#7C5577", type: "matte" },
+    { name: "Matte Pastel Candy", hex: "#DABCC8", type: "matte" },
+    { name: "Matte Sakura Pink", hex: "#E0A8BB", type: "matte" },
+    { name: "Matte Pastel Watermelon", hex: "#E93A3F", type: "matte" },
+    { name: "Matte Lava Red", hex: "#DE1619", type: "matte" },
+    { name: "Matte Army Red", hex: "#AC1A17", type: "matte" },
+    { name: "Matte Muted Red", hex: "#DB3E14", type: "matte" },
+
+    // Satin
+    { name: "Satin Black", hex: "#151515", type: "satin" },
+    { name: "Satin White", hex: "#E6DEDB", type: "satin" },
+    { name: "Satin Grey", hex: "#939598", type: "satin" },
+    { name: "Satin Orange", hex: "#FF9812", type: "satin" },
+    { name: "Satin Yellow", hex: "#F7C603", type: "satin" },
+    { name: "Satin Green", hex: "#60AB61", type: "satin" },
+    { name: "Satin Teal", hex: "#64C2CA", type: "satin" },
+    { name: "Satin Blue", hex: "#0064B9", type: "satin" },
+    { name: "Satin Purple", hex: "#8B63C4", type: "satin" },
+    { name: "Satin Red", hex: "#DD1116", type: "satin" },
+
+    // Silk
+    { name: "Silk Black", hex: "#000203", type: "silk" },
+    { name: "Silk Purple", hex: "#150074", type: "silk" },
+    { name: "Silk Magenta", hex: "#990050", type: "silk" },
+    { name: "Silk Rose", hex: "#C5000A", type: "silk" },
+    { name: "Silk Red", hex: "#CB0100", type: "silk" },
+    { name: "Silk Rose Gold", hex: "#A56F6B", type: "silk" },
+    { name: "Silk Quartz Pink", hex: "#DC857A", type: "silk" },
+    { name: "Silk Bronze", hex: "#641501", type: "silk" },
+    { name: "Silk Orange", hex: "#F14700", type: "silk" },
+    { name: "Silk White", hex: "#DBD1C7", type: "silk" },
+    { name: "Silk Gold", hex: "#B56600", type: "silk" },
+    { name: "Silk Yellow", hex: "#E9C200", type: "silk" },
+    { name: "Silk Lime", hex: "#91C500", type: "silk" },
+    { name: "Silk Green", hex: "#008C63", type: "silk" },
+    { name: "Silk Teal", hex: "#009FA8", type: "silk" },
+    { name: "Silk Light Blue", hex: "#00A0B7", type: "silk" },
+    { name: "Silk Blue", hex: "#0151BA", type: "silk" },
+    { name: "Silk Chrome", hex: "#384657", type: "silk" },
+    { name: "Silk Silver", hex: "#818C9F", type: "silk" },
+
+    // Galaxy
+    { name: "Galaxy Black", hex: "#020203", type: "galaxy" },
+    { name: "Galaxy Dark Blue", hex: "#090C23", type: "galaxy" },
+    { name: "Galaxy Dark Red", hex: "#5E2D22", type: "galaxy" },
+    { name: "Galaxy Dark Green", hex: "#1A3300", type: "galaxy" },
+    { name: "Galaxy Dark Grey", hex: "#333333", type: "galaxy" },
+
+    // Starlight
+    { name: "Starlight Mercury", hex: "#C0C0C0", type: "starlight" },
+    { name: "Starlight Jupiter", hex: "#A07050", type: "starlight" },
+    { name: "Starlight Neptune", hex: "#4060A0", type: "starlight" },
+    { name: "Starlight Comet", hex: "#E0F0FF", type: "starlight" },
+    { name: "Starlight Meteor", hex: "#FF6040", type: "starlight" },
+    { name: "Starlight Aurora", hex: "#40A060", type: "starlight" },
+    { name: "Starlight Nebula", hex: "#8040A0", type: "starlight" },
+    { name: "Starlight Twilight", hex: "#203060", type: "starlight" },
+
+    // Metallic
+    { name: "Metallic Gold", hex: "#D4AF37", type: "metallic" },
+    { name: "Metallic Silver", hex: "#C0C0C0", type: "metallic" },
+    { name: "Metallic Bronze", hex: "#CD7F32", type: "metallic" },
+    { name: "Metallic Blue", hex: "#4682B4", type: "metallic" },
+
+    // Glow
+    { name: "Glow Green", hex: "#90EE90", type: "glow" },
+    { name: "Glow Blue", hex: "#ADD8E6", type: "glow" },
+    { name: "Glow Orange", hex: "#FFD700", type: "glow" },
+    { name: "Glow Pink", hex: "#FFC0CB", type: "glow" },
+
+    // Neon
+    { name: "Neon Magenta", hex: "#FF00FF", type: "neon" },
+    { name: "Neon Green", hex: "#39FF14", type: "neon" },
+    { name: "Neon Yellow", hex: "#FFFF00", type: "neon" },
+    { name: "Neon Orange", hex: "#FF4500", type: "neon" },
+
+    // Translucent
+    { name: "Translucent Cyan", hex: "#00FFFF", type: "translucent" },
+    { name: "Translucent Magenta", hex: "#FF00FF", type: "translucent" },
+    { name: "Translucent Yellow", hex: "#FFFF00", type: "translucent" },
+    { name: "Translucent Natural", hex: "#F0F0E0", type: "translucent" },
 
     // Gradients
-    { name: "Gradient Rainbow", hex: "#FFFF00", background: "linear-gradient(to right, #ff0000, #ffff00, #00ff00, #0000ff, #800080)" },
-    { name: "Gradient Sunset", hex: "#F78E0E", background: "linear-gradient(to right, #F78E0E, #DE1619)" },
-    { name: "Gradient Ocean", hex: "#005AA2", background: "linear-gradient(to right, #5AABB1, #005AA2)" },
-    { name: "Gradient Forest", hex: "#519F61", background: "linear-gradient(to right, #D0E740, #519F61)" }
+    { name: "Gradient Rainbow", hex: "#FFFF00", background: "linear-gradient(to right, #ff0000, #ffff00, #00ff00, #0000ff, #800080)", type: "gradient" },
+    { name: "Gradient Sunset", hex: "#F78E0E", background: "linear-gradient(to right, #F78E0E, #DE1619)", type: "gradient" },
+    { name: "Gradient Ocean", hex: "#005AA2", background: "linear-gradient(to right, #5AABB1, #005AA2)", type: "gradient" },
+    { name: "Gradient Forest", hex: "#519F61", background: "linear-gradient(to right, #D0E740, #519F61)", type: "gradient" }
 ];
 
 const gameBoard = document.getElementById('game-board');
@@ -120,6 +194,9 @@ function createGrid() {
             }
             hexWrapper.dataset.name = color.name;
             hexWrapper.dataset.hex = color.hex;
+            if (color.type) {
+                hexWrapper.classList.add(color.type);
+            }
 
             rowDiv.appendChild(hexWrapper);
         }
