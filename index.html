@@ -10,6 +10,7 @@
 
     <div id="game-container">
         <header id="color-pop-display">
+            <a href="leaderboard.html" id="leaderboard-link" title="Leaderboard">🏆</a>
             <h1 id="pop-text">Panchroma</h1>
         </header>
 
@@ -23,6 +24,19 @@
         </div>
 
         <button id="start-btn">START GAME</button>
+
+        <!-- Name Entry Modal -->
+        <div id="name-modal">
+            <div class="modal-content">
+                <h2>NEW HIGH SCORE!</h2>
+                <p style="color: #ccc;">Enter your name:</p>
+                <input type="text" id="player-name-input" maxlength="15" placeholder="NAME">
+                <div class="modal-buttons">
+                    <button id="submit-score-btn">SUBMIT</button>
+                    <button id="no-thanks-btn">NO THANKS</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

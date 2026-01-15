@@ -224,6 +224,29 @@ const timeElement = document.getElementById('time');
 const startBtn = document.getElementById('start-btn');
 const popText = document.getElementById('pop-text');
 
+// Leaderboard Logic
+const nameModal = document.getElementById('name-modal');
+const nameInput = document.getElementById('player-name-input');
+const submitScoreBtn = document.getElementById('submit-score-btn');
+const noThanksBtn = document.getElementById('no-thanks-btn');
+const badWords = ["FUCK", "SHIT", "DAMN", "BITCH", "CRAP", "HELL", "ASS", "DICK", "COCK", "PUSSY", "BASTARD", "SLUT", "WHORE", "NIGGER", "FAGGOT"];
+
+submitScoreBtn.addEventListener('click', submitScore);
+noThanksBtn.addEventListener('click', () => {
+    nameModal.classList.remove('visible');
+
+    // Reset UI to Title state
+    startBtn.disabled = false;
+    startBtn.style.opacity = '1';
+    startBtn.textContent = "PLAY AGAIN";
+
+    popText.textContent = "Panchroma";
+    popText.classList.add('panchroma-title');
+    popText.style.removeProperty('--pop-color');
+    popText.style.removeProperty('--pop-bg');
+    popText.classList.remove('gradient-pop');
+});
+
 startBtn.addEventListener('click', startGame);
 
 function startGame() {
@@ -263,16 +286,52 @@ function endGame() {
     // Clear any active hex
     document.querySelectorAll('.hex.active').forEach(h => h.classList.remove('active'));
 
-    startBtn.disabled = false;
-    startBtn.style.opacity = '1';
-    startBtn.textContent = "PLAY AGAIN";
+    // Don't show start button yet, wait for name entry
+    // startBtn.disabled = false;
+    // startBtn.style.opacity = '1';
+    // startBtn.textContent = "PLAY AGAIN";
+
     popText.innerHTML = `Game Over!<br>Score: ${score}`;
+
+    // Show Modal
+    nameModal.classList.add('visible');
+    nameInput.value = '';
+    nameInput.focus();
 
     // Reset to white or keep fun?
     popText.classList.remove('panchroma-title');
     popText.classList.remove('gradient-pop');
     popText.style.removeProperty('color'); // Remove inline color if any
     popText.style.setProperty('--pop-color', '#ffffff');
+}
+
+function submitScore() {
+    const rawName = nameInput.value.trim();
+    if (!rawName) {
+        alert("Please enter a name!");
+        return;
+    }
+
+    const nameUpper = rawName.toUpperCase();
+
+    // Profanity check
+    // Split by non-word characters to catch words like "ASS" in "YOU-ASS" but allow "CASSANDRA"
+    const nameTokens = nameUpper.split(/[^A-Z]+/);
+    for (let word of badWords) {
+        if (nameTokens.includes(word)) {
+            alert("Please use an appropriate name.");
+            nameInput.value = '';
+            return;
+        }
+    }
+
+    // Save
+    const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+    leaderboard.push({ name: rawName, score: score, date: new Date().toISOString() });
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+
+    // Redirect
+    window.location.href = 'leaderboard.html';
 }
 
 function spawnHex() {
