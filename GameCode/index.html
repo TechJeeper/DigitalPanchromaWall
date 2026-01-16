@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Polymaker Panchroma Wall Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-container">
+        <header id="color-pop-display">
+            <h1 id="pop-text">Panchroma</h1>
+        </header>
+
+        <div id="controls">
+            <div id="score-board">Score: <span id="score">0</span></div>
+            <div id="timer-board">Time: <span id="time">60</span></div>
+        </div>
+
+        <div id="game-board">
+            <!-- Hexes will be generated here -->
+        </div>
+
+        <div id="overlay-container">
+            <div id="game-over-message"></div>
+            <button id="start-btn">START GAME</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
