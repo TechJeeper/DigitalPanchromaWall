@@ -380,7 +380,7 @@ function showColorPop(name, color, background) {
 function checkResolution() {
     const minArea = 360 * 600;
     const minWidth = 320;
-    const minHeight = 320;
+    const minHeight = 500;
     const width = window.innerWidth;
     const height = window.innerHeight;
     const warning = document.getElementById('resolution-warning');
