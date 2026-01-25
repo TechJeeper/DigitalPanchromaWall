@@ -376,3 +376,24 @@ function showColorPop(name, color, background) {
     void popText.offsetWidth; // trigger reflow
     popText.classList.add('pop-anim');
 }
+
+function checkResolution() {
+    const minArea = 360 * 600;
+    const minWidth = 320;
+    const minHeight = 320;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const warning = document.getElementById('resolution-warning');
+
+    if ((width * height < minArea) || (width < minWidth) || (height < minHeight)) {
+        warning.style.display = 'flex';
+        if (isPlaying) {
+             endGame();
+        }
+    } else {
+        warning.style.display = 'none';
+    }
+}
+
+window.addEventListener('resize', checkResolution);
+window.addEventListener('load', checkResolution);
